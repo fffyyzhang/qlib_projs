@@ -8,10 +8,15 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import glob
+import os,sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import *
+
 
 def load_etf_selection():
     """加载ETF筛选列表"""
-    select_file = "/data/data_liy/quant/etf/etf_human_select.csv"
+    #select_file = "/data/data_liy/quant/etf/etf_human_select.csv"
+    select_file = os.path.join(DIR_DATA, "../research/etf_human_select.csv")
     df = pd.read_csv(select_file)
     selected_df = df[df['human'] == 1][['ts_code', 'extname']].copy()
     selected_etfs = selected_df['ts_code'].tolist()
@@ -22,7 +27,7 @@ def load_etf_selection():
 
 def load_etf_data(etf_codes):
     """加载ETF历史数据"""
-    data_dir = "/data/data_liy/quant/raw/etf_daily"
+    data_dir = os.path.join(DIR_DATA, "etf_daily")
     all_data = []
     
     for etf_code in etf_codes:
@@ -119,7 +124,7 @@ def analyze_daily_max_bias(df, etf_name_map):
 
 def save_results(df):
     """保存分析结果"""
-    output_file = "/data/data_liy/quant/research/etf_ma_bias_research.csv"
+    output_file = os.path.join(DIR_DATA, "../research/etf_ma_bias_research.csv")
     
     # 确保目录存在
     Path(output_file).parent.mkdir(parents=True, exist_ok=True)
